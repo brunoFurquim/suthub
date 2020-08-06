@@ -1,6 +1,8 @@
-async function buscar(pais) {
-    const response = await axios.get('https://restcountries.eu/rest/v2/all')
-    console.log(response)
+let buscar = async (pais) => {
+    let response = await axios.get(`https://restcountries.eu/rest/v2/name/${pais}`)
+    return response.data[0]
 }
 
-buscar()
+let buscar_info_brasil = async () => await buscar('Brasil')
+
+
