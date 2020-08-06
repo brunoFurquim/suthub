@@ -145,7 +145,7 @@
                 <input type="text" id="inputPais" class="form-control" placeholder="Pesquisar países...">
               </div>
               <div class="col-lg-2">
-                <button class="btn btn-outline-primary">
+                <button class="btn btn-outline-primary" id="botaoPesquisaPaises">
                   Pesquisar
                 </button>
               </div>
@@ -153,7 +153,9 @@
             <hr />
             <div class="row align-items-center mt-4">
               <h2 class="display-5 ml-3">Idiomas oficiais: </h2>
-
+              <div class="col-lg-12">
+                <ul id="listaIdiomasOficiais"></ul>
+              </div>
             </div>
 
           </div>
@@ -248,7 +250,6 @@
         tabela.deleteRow(1)
       let linha = tabela.insertRow(1)
       let coluna;
-
       Object.values(info_brasil).forEach((elemento, indice) => {
         //não insere a ultima propriedade na tabela
         if (indice !== 8) {
@@ -261,10 +262,39 @@
       //adiciona fusos horários na lista em um modal
       let listaFusos = $('#modalFusosList')[0]
       listaFusos.innerHTML = ''
+      let li;
       info_brasil.fusosHorarios.forEach((fuso) => {
-        let li = document.createElement('li')
+        li = document.createElement('li')
         li.innerText = fuso
         listaFusos.appendChild(li)
+      })
+    })
+  
+  
+    $('#botaoPesquisaPaises').click(async() => {
+      let pais = informacoes.nome_pais
+
+      let response = await buscar(pais)
+      console.log('Response', response)
+      let linguagens = response.languages.map(linguagem => {
+        return {
+          codigo: linguagem.iso639_1,
+          nome: linguagem.name
+        }
+      })
+
+      let listaIdiomas = $('#listaIdiomasOficiais')[0]
+      listaIdiomas.innerHTML = ''
+      let li;
+      linguagens.forEach(linguagem => {
+        li = document.createElement('li')
+        li.innerHTML = `<button class="btn btn-outline-primary mb-2" id="${linguagem.codigo}">${linguagem.nome}</button>`
+        listaIdiomas.appendChild(li)
+
+        $(`#${linguagem.codigo}`).click(async () => {
+          let response = await buscarIdioma(linguagem.codigo)
+          //PAROU AQUI, JA TA RETORNANDO OS PAISES QUE FALAM CADA IDIOMA
+        })
       })
     })
   </script>
