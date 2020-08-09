@@ -9,5 +9,5 @@ let buscar_info_brasil = async () => await buscar('Brasil')
 
 let buscarIdioma = async (idioma) => {
     let response = await axios.get(`https://restcountries.eu/rest/v2/lang/${idioma}`)
-    console.log(response)
+    return response.data;
 }

@@ -161,6 +161,27 @@
           </div>
         </div>
       </div>
+      <div class="modal fade" id="modalIdiomas" data-backdrop="static" data-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">Países que falam o mesmo idioma: </h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <ul id="modalIdiomasList">
+
+              </ul>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
   <hr />
@@ -269,9 +290,9 @@
         listaFusos.appendChild(li)
       })
     })
-  
-  
-    $('#botaoPesquisaPaises').click(async() => {
+
+
+    $('#botaoPesquisaPaises').click(async () => {
       let pais = informacoes.nome_pais
 
       let response = await buscar(pais)
@@ -294,6 +315,18 @@
         $(`#${linguagem.codigo}`).click(async () => {
           let response = await buscarIdioma(linguagem.codigo)
           //PAROU AQUI, JA TA RETORNANDO OS PAISES QUE FALAM CADA IDIOMA
+          console.log(response)
+          let liIdioma;
+          let lista = response.map(pais => pais.name)
+          let listaIdiomasModal = $('#modalIdiomasList')[0]
+          listaIdiomasModal.innerHTML = ''
+          lista.forEach(pais => {
+            liIdioma = document.createElement('li')
+            liIdioma.innerText = pais;
+            listaIdiomasModal.appendChild(liIdioma)
+          })
+
+          $('#modalIdiomas').modal('show');
         })
       })
     })
