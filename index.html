@@ -28,30 +28,18 @@
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
     <div class="container">
-      <a class="navbar-brand" href="#">Start Bootstrap</a>
+      <a class="navbar-brand" href="#">Projeto Suthub</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
         aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="#">Sign Up</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Log In</a>
-          </li>
-        </ul>
-      </div>
     </div>
   </nav>
 
   <header class="masthead text-center text-white">
     <div class="masthead-content">
       <div class="container">
-        <h1 class="masthead-heading mb-0">One Page Wonder</h1>
-        <h2 class="masthead-subheading mb-0">Will Rock Your Socks Off</h2>
-        <a href="#" class="btn btn-primary btn-xl rounded-pill mt-5">Learn More</a>
+        <h1 class="masthead-heading mb-0">Projeto Suthub</h1>
       </div>
     </div>
     <div class="bg-circle-1 bg-circle"></div>
@@ -65,7 +53,7 @@
       <div class="row align-items-center">
         <div class="col-lg-2 order-lg-1">
           <div class="pt-5 pb-5 px-1">
-            <img class="img-fluid rounded-circle" src="img/01.jpg" alt="">
+            <img class="rounded-circle" src="img/brasil_flag.jpg" alt="" height="150" width="150">
           </div>
         </div>
         <div class="col-lg-10 order-lg-2">
@@ -134,7 +122,7 @@
       <div class="row align-items-center">
         <div class="col-lg-4 order-lg-2">
           <div class="p-5">
-            <img class="img-fluid rounded-circle" src="img/01.jpg" alt="">
+            <img class="rounded-circle" src="img/world_photo.jpg" alt="" height="300" width="300">
           </div>
         </div>
         <div class="col-lg-8 order-lg-1">
@@ -191,14 +179,14 @@
       <div class="row align-items-center">
         <div class="col-lg-4">
           <div class="p-5">
-            <img class="img-fluid rounded-circle" src="img/02.jpg" alt="">
+            <img class="rounded-circle" src="img/regional.jpg" alt="" height="300" width="300">
           </div>
         </div>
         <div class="col-lg-8">
           <div class="p-5">
             <h2 class="display-4">Blocos regionais</h2>
             <ul id="listaBlocosRegionais">
-              
+
 
             </ul>
           </div>
@@ -247,125 +235,15 @@
   <script type="text/javascript"
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDgpUl3vBh0K4hT43sbh_G1b-eGYzxpL80&libraries=places"></script>
 
+  <!-- Importações de script -->
   <script src="js/index.js"></script>
   <script src="js/autocomplete.js"></script>
+  <script src="js/event_handler.js"></script>
 
   <script>
-    let info_brasil = {}
-    $('#botaoPesquisaBrasil').click(async () => {
-      var dados = await buscarInfoBrasil()
-
-      info_brasil = {
-        nome: dados.nativeName,
-        capital: dados.capital,
-        dinheiro: dados.currencies[0].name,
-        fusosHorarios: dados.timezones,
-        linguagens: dados.languages.map(linguagem => linguagem.nativeName),
-        populacao: dados.population,
-        subregiao: dados.subregion,
-        dominioPrincipal: dados.topLevelDomain[0],
-        bandeira: dados.flag,
-      }
-
-      //adiciona informações sobre o brasil em uma tabela
-      let tabela = $('#tableInformacoesBrasil')[0]
-      if (tabela.rows.length == 2)
-        tabela.deleteRow(1)
-      let linha = tabela.insertRow(1)
-      let coluna;
-      Object.values(info_brasil).forEach((elemento, indice) => {
-        //não insere a ultima propriedade na tabela
-        if (indice !== 8) {
-          coluna = linha.insertCell(indice)
-          if (indice === 3) coluna.innerHTML = '<button class="btn btn-outline-info" id="visualizarFusos" data-toggle="modal" data-target="#modalFusos">Visualizar</button>'
-          else coluna.innerHTML = elemento
-        }
-      })
-
-      //adiciona fusos horários na lista em um modal
-      let listaFusos = $('#modalFusosList')[0]
-      listaFusos.innerHTML = ''
-      let li;
-      info_brasil.fusosHorarios.forEach((fuso) => {
-        li = document.createElement('li')
-        li.innerText = fuso
-        listaFusos.appendChild(li)
-      })
-    })
-
-
-    $('#botaoPesquisaPaises').click(async () => {
-      let pais = informacoes.nome_pais
-
-      let response = await buscar(pais)
-      console.log('Response', response)
-      let linguagens = response.languages.map(linguagem => {
-        return {
-          codigo: linguagem.iso639_1,
-          nome: linguagem.name
-        }
-      })
-
-      let listaIdiomas = $('#listaIdiomasOficiais')[0]
-      listaIdiomas.innerHTML = ''
-      let li;
-      linguagens.forEach(linguagem => {
-        li = document.createElement('li')
-        li.innerHTML = `<button class="btn btn-outline-primary mb-2" id="${linguagem.codigo}">${linguagem.nome}</button>`
-        listaIdiomas.appendChild(li)
-
-        $(`#${linguagem.codigo}`).click(async () => {
-          let response = await buscarIdioma(linguagem.codigo)
-          //PAROU AQUI, JA TA RETORNANDO OS PAISES QUE FALAM CADA IDIOMA
-          console.log(response)
-          let liIdioma;
-          let lista = response.map(pais => pais.name)
-          let listaIdiomasModal = $('#modalIdiomasList')[0]
-          listaIdiomasModal.innerHTML = ''
-          lista.forEach(pais => {
-            liIdioma = document.createElement('li')
-            liIdioma.innerText = pais;
-            listaIdiomasModal.appendChild(liIdioma)
-          })
-
-          $('#modalIdiomas').modal('show');
-        })
-      })
-    })
-  
-    $(document).ready(async () => {
-      let blocosRegionais = await listarBlocosRegionais()
-      let listaBlocosRegionais = $('#listaBlocosRegionais')[0]
-      listaBlocosRegionais.innerHTML = ''
-
-      let li;
-      blocosRegionais.forEach((bloco) => {
-        li = document.createElement('li')
-        li.innerHTML = `<button class="btn btn-secondary mt-2" id="${bloco.acronimo}">${bloco.nome}</button>`
-        listaBlocosRegionais.appendChild(li)
-
-        $(`#${bloco.acronimo}`).click(async () => {
-          let response = await buscarBlocoRegional(bloco.acronimo)
-          let paises = response.map(pais => {
-            return {
-              nome: pais.translations.br === undefined ? pais.name : pais.translations.br,
-              latitude: pais.latlng[0],
-              longitude: pais.latlng[1]
-            }
-          })
-
-          let listaPaisesBlocoRegional = $('#listaPaisesBlocoRegional')[0]
-          listaPaisesBlocoRegional.innerHTML = ''
-          let liPaisBlocoRegional;
-          paises.forEach(pais => {
-            liPaisBlocoRegional = document.createElement('li')
-            liPaisBlocoRegional.innerText = `${pais.nome} - (lat: ${pais.latitude}, long: ${pais.longitude})`
-            listaPaisesBlocoRegional.appendChild(liPaisBlocoRegional)
-          })
-
-          $('#modalPaisesBlocoRegional').modal('show')
-        })
-      })
+    $(document).ready(() => {
+      //carrega a lista de blocos regionais e coloca no DOM como botoes
+      criarListaBlocosRegionais()
     })
   </script>
 
