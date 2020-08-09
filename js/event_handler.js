@@ -46,7 +46,6 @@ $('#botaoPesquisaPaises').click(async () => {
     let pais = informacoes.nome_pais
 
     let response = await buscar(pais)
-    console.log('Response', response)
     let linguagens = response.languages.map(linguagem => {
         return {
             codigo: linguagem.iso639_1,
@@ -64,8 +63,6 @@ $('#botaoPesquisaPaises').click(async () => {
 
         $(`#${linguagem.codigo}`).click(async () => {
             let response = await buscarIdioma(linguagem.codigo)
-            //PAROU AQUI, JA TA RETORNANDO OS PAISES QUE FALAM CADA IDIOMA
-            console.log(response)
             let liIdioma;
             let lista = response.map(pais => pais.name)
             let listaIdiomasModal = $('#modalIdiomasList')[0]
